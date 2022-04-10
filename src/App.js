@@ -11,7 +11,7 @@ function App() {
   return (
     <Suspense fallback={<div>Liading...</div>}>
       <Routes>
-        <Route path="goit-react-hw-05-movies/" element={<Layout />}>
+        <Route path="/*" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="movies" element={<MoviesPage />}>
             <Route path=":moviesId" element={<MoviesDitailPage />}>
