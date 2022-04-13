@@ -16,7 +16,7 @@ const MoviesDitailPage = () => {
 
   return (
     <>
-      <Link to="/" style={{ marginBottom: 10, display: "block" }}> ⬅️ Go back </Link>
+      <Link to="/goit-react-hw-05-movies" style={{ marginBottom: 10, display: "block" }}> ⬅️ Go back </Link>
       <div style={{ display: "flex" }}>
         <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} style={{ marginRight: 30 }} />
         <div>
