@@ -1,9 +1,11 @@
+import MovieList from 'components/MovieList'
 import React, { Suspense, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { fetchMovies } from '../components/services/api'
 
 const HomePage = () => {
   const [movies, setMovies] = useState([])
+  const location = useLocation()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,15 +16,10 @@ const HomePage = () => {
   }, [])
 
   return (
-    <Suspense  fallback={<div>Liading...</div>}>
+    <Suspense fallback={<div>Liading...</div>}>
       <h1> Trending movies</h1>
-      {movies.map(movie => (
-        <ul key={movie.id}>
-          <li>
-            <Link to={`movies/${movie.id}`} >{movie.original_title}</Link>
-          </li>
-        </ul>
-      ))}
+      <MovieList to={'movies/'} location={location} movies={movies} />
+
     </Suspense>
 
   )

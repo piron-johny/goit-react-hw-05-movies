@@ -1,37 +1,37 @@
-import { Suspense, useState } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import MovieList from 'components/MovieList';
+import { Suspense, useEffect, useState } from 'react';
+import { Outlet, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { fetchMoviesByQuery } from '../components/services/api';
 
 const MoviesPage = () => {
-  const navigate = useNavigate();
   const { moviesId } = useParams();
-  const [value, setValue] = useState('')
+  const [query, setQuery] = useState('')
   const [searchMovies, setSearchMovies] = useState([])
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const location = useLocation();
 
   const HandleSubmit = async (e) => {
     e.preventDefault()
-    const searchData = await fetchMoviesByQuery(value)
-    setSearchMovies(searchData)
-    navigate(`?query=${value}`)
+    setSearchParams({ query })
   }
+
+  useEffect(() => {
+    const queryParams = searchParams.get('query')
+    if(queryParams){
+      setQuery(queryParams)
+      fetchMoviesByQuery(queryParams).then(res => setSearchMovies(res))
+    }
+  }, [searchParams])
 
   return (
     <>
       {!moviesId && <div>
         <div>Search movies</div>
         <form onSubmit={HandleSubmit}>
-          <input type="text" onChange={(e) => setValue(e.target.value)} />
+          <input type="text" onChange={(e) => setQuery(e.target.value)} value={query} />
           <button type='submiy'>Send</button>
         </form>
-
-        {searchMovies.map(movie => (
-          <ul key={movie.id}>
-            <li>
-              <Link to={`${movie.id}`} >{movie.original_title}</Link>
-            </li>
-          </ul>
-        ))}
-
+        <MovieList to={''} movies={searchMovies} location={location} />
       </div>}
       <Suspense fallback={<div>Liading...</div>}>
         <Outlet />

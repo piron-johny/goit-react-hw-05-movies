@@ -1,10 +1,21 @@
-import React, { Suspense, useEffect, useState } from 'react'
-import { Link, Outlet, useParams } from 'react-router-dom'
-import { fetchMoviesById } from '../components/services/api'
+import React, { Suspense, useEffect, useState } from 'react';
+import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { fetchMoviesById } from '../components/services/api';
 
 const MoviesDitailPage = () => {
-  const { moviesId } = useParams()
-  const [movie, setMovie] = useState({})
+  const { moviesId } = useParams();
+  const [movie, setMovie] = useState({});
+  const [movieLocation, setMovieLOcation] = useState({});
+  const navigate = useNavigate();
+  const location = useLocation()
+
+  const onBackHandle = () => {
+    navigate(movieLocation)
+  }
+
+  useEffect(() => {
+    if(location.state?.from) setMovieLOcation(location.state.from)
+  }, [location.state])
 
   useEffect(() => {
     const fetchById = async () => {
@@ -16,7 +27,8 @@ const MoviesDitailPage = () => {
 
   return (
     <>
-      <Link to="/goit-react-hw-05-movies" style={{ marginBottom: 10, display: "block" }}> ⬅️ Go back </Link>
+      {/* <Link to="/goit-react-hw-05-movies" style={{ marginBottom: 10, display: "block" }}> ⬅️ Go back </Link> */}
+      <button onClick={onBackHandle}> ⬅️ Go back </button>
       <div style={{ display: "flex" }}>
         <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} style={{ marginRight: 30 }} />
         <div>
